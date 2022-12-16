@@ -2,14 +2,14 @@ const logger = require('../config/logger');
 const { ApiError } = require('../utils/apiError');
 
 // 에러를 로깅해주는 미들웨어
-const logger = (err, req, res, next) => {
+const errorLogger = (err, req, res, next) => {
   const { stack } = err; // err.stack을 바로 넣지 않는 이유는 winston이 메소드에 인자로 들어간 변수를 지 맘대로 바꾸는 것 같아서 그렇습니다
   logger.error(stack); // error 레벨로 로깅
   next(err); // 다음 에러 처리 미들웨어 호출
 };
 
 // 응답하기 전에 apiError가 아닌 에러를 apiError로 바꿔주는 미들웨어
-const converter = (err, req, res, next) => {
+const errorConverter = (err, req, res, next) => {
   // ApiError인 경우 그대로 다음 미들웨어 호출
   if (err instanceof ApiError) next(err);
   // joi에서 발생한 유효성 검사 에러인 경우
@@ -19,8 +19,8 @@ const converter = (err, req, res, next) => {
 };
 
 // 에러를 응답하는 미들웨어
-const handler = (err, req, res, next) => {
+const errorHandler = (err, req, res, next) => {
   res.status(err.statusCode).json({ errorMessage: err.message });
 };
 
-module.exports = { converter, logger, handler };
+module.exports = { errorLogger, errorConverter, errorHandler };

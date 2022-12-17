@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const app = require('./app');
-const database = require('./config/database');
 const logger = require('./config/logger');
 
 const { PORT } = process.env;

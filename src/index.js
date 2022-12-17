@@ -7,7 +7,7 @@ const logger = require('./config/logger');
 const { PORT } = process.env;
 
 // DB에 연결
-database.query('SHOW TABLES', (err, result) => {
+database.query('SHOW TABLES', (err) => {
   if (err) return logger.error(`DB 연결 실패: ${err.stack}`);
   else logger.info('DB 연결 성공!');
 });

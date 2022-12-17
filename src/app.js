@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -10,7 +9,7 @@ const {
   errorConverter,
   errorHandler,
 } = require('./middlewares/error');
-const { PORT, NODE_ENV } = process.env;
+const { NODE_ENV } = process.env;
 
 const app = express();
 
@@ -31,9 +30,5 @@ app.use(router); // 라우터 연결
 app.use(errorLogger); // 에러 로깅 미들웨어
 app.use(errorConverter); // 에러 전환 미들웨어
 app.use(errorHandler); // 에러 응답 미들웨어
-
-app.listen(PORT, () => {
-  logger.info(`${PORT} 포트로 서버가 열렸습니다.`);
-});
 
 module.exports = app;

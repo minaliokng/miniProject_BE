@@ -2,10 +2,10 @@
   "name": "miniproject_be",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "pm2 start ./src/app.js",
-    "dev": "cross-env NODE_ENV=development nodemon src/app.js",
+    "start": "pm2 start ./src/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon src/index.js",
     "test": "cross-env NODE_ENV=test jest --forceExit",
     "test:silent": "cross-env NODE_ENV=test jest --silent --forceExit",
     "test:coverage": "cross-env NODE_ENV=test jest --coverage --forceExit",

@@ -9,7 +9,7 @@ class LikeRepository {
     return isExist;
   }
 
-  saveLike = async ({ userId, postId }) => {
+  saveLike = async (postId, userId) => {
     try {
       await database.query(
         'INSERT INTO Likes(userId, postId) VALUES (?, ?)',
@@ -21,7 +21,7 @@ class LikeRepository {
     }
   };
 
-  cancleLike = async ({ userId, postId }) => {
+  cancleLike = async (postId, userId) => {
     const [result] = await database.query(
       `DELETE FROM Likes where userId=${userId} AND postId=${postId}`
     );

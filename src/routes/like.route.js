@@ -5,7 +5,6 @@ const authMiddleware = require('../middlewares/auth.mddleware');
 const router = Router();
 const likeController = new LikeController();
 
-router.post('/posts/:postId', authMiddleware.loggedInYet, likeController.saveLike);
-router.delete('/posts/:postId', authMiddleware.loggedInYet, likeController.cancleLike);
+router.post('/posts/:postId', authMiddleware.loggedInYet, likeController.changeLike);
 
 module.exports = router;

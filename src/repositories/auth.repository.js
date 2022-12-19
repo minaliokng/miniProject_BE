@@ -17,7 +17,7 @@ class AuthRepository {
   //닉네임으로 회원정보 검색
   getUserByNickname = async ({ nickname }) => {
     const [isExistUser] = await dataBase.query(
-      `SELECT * FROM Users WHERE email = '${nickname}'`,
+      `SELECT * FROM Users WHERE nickname = '${nickname}'`,
     );
     return isExistUser;
   };

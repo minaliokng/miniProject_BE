@@ -10,7 +10,7 @@ class AuthController {
     try {
       const userInfo = { ...req.body };
       await this.authService.register(userInfo);
-      return res.status(201).json({ message: '회원가입이 완료되었습니다.' });
+      return res.status(201).json({ message: '가입완료.' });
     } catch (err) {
       next(err);
     }
@@ -21,8 +21,7 @@ class AuthController {
     try {
       const userInfo = { ...req.body };
       const token = await this.authService.userLogin(userInfo);
-      res.header('token', token);
-      res.status(200).json({ message: '로그인이 완료되었습니다.' });
+      res.status(200).json({ token });
     } catch (err) {
       next(err);
     }
@@ -32,8 +31,8 @@ class AuthController {
   checkEmail = async (req, res, next) => {
     try {
       const userEmail = req.body;
-      await this.authService.checkEmail(userEmail);
-      res.status(200).json({ message: '사용 가능한 이메일입니다.' });
+      const existEmail = await this.authService.checkEmail(userEmail);
+      res.status(200).json({ result: existEmail });
     } catch (err) {
       next(err);
     }
@@ -43,8 +42,8 @@ class AuthController {
   checkNickname = async (req, res, next) => {
     try {
       const userNickname = req.body;
-      await this.authService.checkNickname(userNickname);
-      res.status(200).json({ message: '사용 가능한 닉네임입니다.' });
+      const existNickname = await this.authService.checkNickname(userNickname);
+      res.status(200).json({ result: existNickname });
     } catch (err) {
       next(err);
     }

@@ -18,7 +18,7 @@ class LikeService {
     }
   }
 
-  cancleLike = async (body) => {
+  cancleLike = async (postId, userId) => {
     if (!await this.likeRepository.existPost(postId))
       return { errorMessage: '존재하지 않는 게시글', code: 404 };
 

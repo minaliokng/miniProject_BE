@@ -1,8 +1,6 @@
 const database = require('../config/database');
-const s3 = require('../config/s3');
 
-const postsNum = 15;
-class PostsRepository {
+class PostsMySQLRepository {
   createPost = async ({ title, content, categoryId }, imageKey, userId) => {
     await database.query(
       'INSERT INTO Posts(title, content, imageKey, categoryId, userId) VALUES (?, ?, ?, ?, ?)',
@@ -15,39 +13,40 @@ class PostsRepository {
       'SELECT COUNT(*) AS rowsNum FROM Posts WHERE categoryId = ?',
       [categoryId],
     );
-    return Math.ceil(rowsNum / postsNum);
+    return Math.ceil(rowsNum / 6);
   };
 
   getPosts = async (categoryId, page, userId) => {
     const [posts] = await database.query(
-      `SELECT P.postId, P.title,
-      CONCAT(?, P.imageKey) AS imageUrl,
-      P.createdAt, P.updatedAt,
-      EXISTS(SELECT * WHERE L.userId = ?) AS isLiked,
-      U.nickname AS userNickname, P.userId
+      `SELECT
+        P.postId,
+        P.title,
+        CONCAT(?, P.imageKey) AS imageUrl,
+        EXISTS(SELECT * WHERE L.userId = ?) AS isLiked,
+        U.nickname AS userNickname,
+        P.userId
       FROM Posts P
       INNER JOIN Users U ON P.userId = U.userId
       LEFT JOIN Likes L ON P.postId = L.postId
       WHERE P.categoryId = ? ORDER BY postId DESC LIMIT ? OFFSET ?`,
-      [
-        process.env.AWS_S3_BUCKET_HOST,
-        userId,
-        categoryId,
-        postsNum,
-        postsNum * (page - 1),
-      ],
+      [process.env.AWS_S3_BUCKET_HOST, userId, categoryId, 6, 6 * (page - 1)],
     );
     return posts;
   };
 
   getPost = async (postId, userId) => {
     const [[post]] = await database.query(
-      `SELECT P.postId, P.title, P.content,
-      CONCAT(?, P.imageKey) AS imageUrl,
-      P.createdAt, P.updatedAt,
-      EXISTS(SELECT * WHERE L.userId = ?) AS isLiked,
-      COUNT(L.userId) AS likesNum,
-      U.nickname AS userNickname, P.userId
+      `SELECT
+        P.postId,
+        P.title,
+        P.content,
+        CONCAT(?, P.imageKey) AS imageUrl,
+        DATE_FORMAT(CONVERT_TZ(P.createdAt, '+00:00', '+09:00'), '%Y. %m. %d. %H:%i') AS createdAt,
+        P.hasUpdated,
+        EXISTS(SELECT * WHERE L.userId = ?) AS isLiked,
+        COUNT(L.userId) AS likesNum,
+        U.nickname AS userNickname,
+        P.userId
       FROM Posts P
       INNER JOIN Users U ON P.userId = U.userId
       LEFT JOIN Likes L ON P.postId = L.postId
@@ -57,10 +56,9 @@ class PostsRepository {
     return post;
   };
 
-  checkForPost = async (postId, { imageKey }) => {
-    const columns = imageKey ? 'userId, imageKey' : 'userId';
+  checkForPost = async (postId) => {
     const [[result]] = await database.query(
-      `SELECT ${columns} FROM Posts WHERE postId = ?`,
+      `SELECT userId, imageKey FROM Posts WHERE postId = ?`,
       [postId],
     );
     return result;
@@ -68,7 +66,7 @@ class PostsRepository {
 
   updatePost = async (postId, { title, content, categoryId }) => {
     await database.query(
-      'UPDATE Posts SET title = ?, content = ?, categoryId = ? WHERE postId = ?',
+      'UPDATE Posts SET title = ?, content = ?, categoryId = ?, hasUpdated = 1 WHERE postId = ?',
       [title, content, categoryId, postId],
     );
   };
@@ -76,13 +74,6 @@ class PostsRepository {
   deletePost = async (postId) => {
     await database.query('DELETE FROM Posts WHERE postId = ?', [postId]);
   };
-
-  deleteImage = async (imageKey) => {
-    await s3.deleteObject({
-      Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: imageKey,
-    });
-  };
 }
 
-module.exports = PostsRepository;
+module.exports = PostsMySQLRepository;

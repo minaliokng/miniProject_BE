@@ -38,7 +38,7 @@ class AuthService {
       isExistUser.password,
     );
     if (decipheredPassword !== true)
-      throw new ApiError('이메일 또는 비밀번호 불일치.', 401);
+      throw new ApiError('이메일 또는 비밀번호 불일치', 401);
     const token = await jwt.sign(
       { userId: isExistUser.userId },
       JWT_SECRET_KEY,

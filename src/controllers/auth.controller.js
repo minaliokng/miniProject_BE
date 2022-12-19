@@ -10,7 +10,7 @@ class AuthController {
     try {
       const userInfo = { ...req.body };
       await this.authService.register(userInfo);
-      return res.status(201).json({ message: '가입완료.' });
+      return res.status(201).json({ message: '가입 완료.' });
     } catch (err) {
       next(err);
     }

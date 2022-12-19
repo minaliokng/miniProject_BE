@@ -43,7 +43,7 @@ class AuthService {
     if (decipheredPassword !== true)
       throw new ApiError('비밀번호가 일치하지 않습니다.', 400);
     const token = await jwt.sign(
-      { userId: isExistuser.userId },
+      { userId: isExistUser.userId },
       JWT_SECRET_KEY,
       {
         expiresIn: '1h',
@@ -56,11 +56,8 @@ class AuthService {
 
   //이메일 중복 검사
   checkEmail = async (userEmail) => {
-    console.log(userEmail);
     const { email } = userEmail;
-    console.log(email);
     await emailPattern.validateAsync(email);
-
     const [isExistEmail] = await this.authRepository.getUserByEmail({
       email,
     });

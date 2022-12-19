@@ -7,6 +7,14 @@ class AuthRepository {
       [email, nickname, encryptedPassword],
     );
   };
+  //이메일 또는 닉네임으로 회원정보 검색
+  getUserByEmailOrNickname = async ({ email, nickname }) => {
+    const [isExistUser] = await dataBase.query(
+      `SELECT * FROM Users WHERE email = '${email}' OR nickname = '${nickname}'`,
+    );
+    return isExistUser;
+  };
+
   //이메일로 회원정보검색
   getUserByEmail = async ({ email }) => {
     const [isExistUser] = await dataBase.query(

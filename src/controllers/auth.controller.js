@@ -20,7 +20,8 @@ class AuthController {
   userLogin = async (req, res, next) => {
     try {
       const userInfo = { ...req.body };
-      await this.authService.userLogin(userInfo);
+      const token = await this.authService.userLogin(userInfo);
+      res.header('token', token);
       res.status(200).json({ message: '로그인이 완료되었습니다.' });
     } catch (err) {
       next(err);

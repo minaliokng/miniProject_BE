@@ -5,18 +5,12 @@ class LikeController {
     this.likeService = new LikeService();
   }
 
-  saveLike = async(req, res, next) => {
+  changeLike = async(req, res) => {
     const {postId} = req.params;
     const {userId} = res.locals;
-    const result = await this.likeService.saveLike(postId, userId);
-    const messageType = Object.keys(result)[0];
-    res.status(result.code).json({messageType: result[messageType]});
-  }
 
-  cancleLike = async(req, res, next) => {
-    const {postId} = req.params;
-    const {userId} = res.locals;
-    const result = await this.likeService.cancleLike(postId, userId);
+    const result = await this.likeService.changeLike(postId, userId);
+    console.log(result)
     const messageType = Object.keys(result)[0];
     res.status(result.code).json({messageType: result[messageType]});
   }

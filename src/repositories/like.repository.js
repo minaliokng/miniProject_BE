@@ -9,23 +9,19 @@ class LikeRepository {
     return isExist;
   }
 
-  saveLike = async (postId, userId) => {
+  changeLike = async (postId, userId) => {
     try {
-      await database.query(
+      return await database.query(
         'INSERT INTO Likes(userId, postId) VALUES (?, ?)',
         [userId, postId],
       );
     }
     catch {
+      const [result] = await database.query(
+        `DELETE FROM Likes where userId=${userId} AND postId=${postId}`
+      );
       throw ('already');
     }
-  };
-
-  cancleLike = async (postId, userId) => {
-    const [result] = await database.query(
-      `DELETE FROM Likes where userId=${userId} AND postId=${postId}`
-    );
-    return result;
   }
 }
 

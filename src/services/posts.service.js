@@ -6,8 +6,8 @@ class PostsService {
     this.postsRepository = new PostsRepository();
   }
 
-  createPost = async (post, userId) => {
-    await this.postsRepository.createPost(post, userId);
+  createPost = async (post, imageKey, userId) => {
+    await this.postsRepository.createPost(post, imageKey, userId);
   };
 
   getPosts = async (categoryId, page, userId) => {
@@ -29,25 +29,27 @@ class PostsService {
   };
 
   updatePost = async (postId, postInput, userId) => {
-    const existPost = await this.postsRepository.checkForPost(postId);
+    const post = await this.postsRepository.checkForPost(postId);
 
-    if (!existPost) throw new ApiError('존재하지 않는 게시글', 404);
+    if (!post) throw new ApiError('존재하지 않는 게시글', 404);
 
-    if (userId !== existPost.userId)
-      throw new ApiError('사용자 정보 불일치', 403);
+    if (userId !== post.userId) throw new ApiError('사용자 정보 불일치', 403);
 
     await this.postsRepository.updatePost(postId, postInput);
   };
 
   deletePost = async (postId, userId) => {
-    const existPost = await this.postsRepository.checkForPost(postId);
+    const post = await this.postsRepository.checkForPost(postId, {
+      imageKey: true,
+    });
 
-    if (!existPost) throw new ApiError('존재하지 않는 게시글', 404);
+    if (!post) throw new ApiError('존재하지 않는 게시글', 404);
 
-    if (userId !== existPost.userId)
-      throw new ApiError('사용자 정보 불일치', 403);
+    if (userId !== post.userId) throw new ApiError('사용자 정보 불일치', 403);
 
     await this.postsRepository.deletePost(postId);
+
+    await this.postsRepository.deleteImage(post.imageKey);
   };
 }
 

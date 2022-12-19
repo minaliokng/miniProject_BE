@@ -19,9 +19,12 @@ class AuthService {
   register = async (userInfo) => {
     const { email, nickname, password } =
       await registerRequestPattern.validateAsync(userInfo);
-    const isExistUser = await this.authRepository.getUserByEmail({ email });
-    if (isExistUser.length !== 0 || isExistUser.nickname === nickname)
-      throw new ApiError('중복된 이메일 또는 닉네임', 400);
+    const isExistUser = await this.authRepository.getUserByEmailOrNickname({
+      email,
+      nickname,
+    });
+    console.log(isExistUser);
+    if (isExistUser[0]) throw new ApiError('중복된 이메일 또는 닉네임', 400);
     const encryptedPassword = await bcrypt.hash(password, 10);
     await this.authRepository.register({ email, nickname, encryptedPassword });
   };
@@ -38,7 +41,7 @@ class AuthService {
       isExistUser.password,
     );
     if (decipheredPassword !== true)
-      throw new ApiError('이메일 또는 비밀번호 불일치.', 401);
+      throw new ApiError('이메일 또는 비밀번호 불일치', 401);
     const token = await jwt.sign(
       { userId: isExistUser.userId },
       JWT_SECRET_KEY,

@@ -8,7 +8,7 @@ const loggedInYet = async (req, res, next) => {
     const { authorization } = req.headers;
     if (!authorization) throw err;
     const [tokenType, tokenValue] = authorization.split(' ');
-    if (tokenType === 'Bearer' || tokenValue)
+    if (tokenType === 'Bearer' && tokenValue)
       res.locals.userId = jwt.verify(tokenValue, JWT_SECRET_KEY).userId;
     next();
   } catch (err) {
@@ -22,7 +22,7 @@ const alreadyLoggedIn = async (req, res, next) => {
     const { authorization } = req.headers;
     if (!authorization) return next();
     const [tokenType, tokenValue] = authorization.split(' ');
-    if (tokenType === 'Bearer' || tokenValue) {
+    if (tokenType === 'Bearer' && tokenValue) {
       jwt.verify(tokenValue, JWT_SECRET_KEY);
       next(new ApiError('로그인 정보가 이미 있음', 400));
     }
@@ -38,7 +38,7 @@ const passLogin = async (req, res, next) => {
     const { authorization } = req.headers;
     if (authorization) {
       const [tokenType, tokenValue] = authorization.split(' ');
-      if (tokenType === 'Bearer' || tokenValue)
+      if (tokenType === 'Bearer' && tokenValue)
         res.locals.userId = jwt.verify(tokenValue, JWT_SECRET_KEY).userId;
     }
     next();

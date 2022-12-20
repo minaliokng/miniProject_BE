@@ -23,7 +23,6 @@ class AuthService {
       email,
       nickname,
     });
-    console.log(isExistUser);
     if (isExistUser[0]) throw new ApiError('중복된 이메일 또는 닉네임', 400);
     const encryptedPassword = await bcrypt.hash(password, 10);
     await this.authRepository.register({ email, nickname, encryptedPassword });

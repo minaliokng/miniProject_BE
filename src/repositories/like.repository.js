@@ -11,16 +11,17 @@ class LikeRepository {
 
   changeLike = async (postId, userId) => {
     try {
-      return await database.query(
+      await database.query(
         'INSERT INTO Likes(userId, postId) VALUES (?, ?)',
         [userId, postId],
       );
+      return true;
     }
     catch {
       const [result] = await database.query(
         `DELETE FROM Likes where userId=${userId} AND postId=${postId}`
       );
-      throw ('already');
+      return false;
     }
   }
 }

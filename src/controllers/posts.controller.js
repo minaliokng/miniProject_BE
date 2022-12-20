@@ -8,13 +8,14 @@ class PostsController {
 
   createPost = async (req, res, next) => {
     try {
-      const { postInput, userId } =
+      const { postInput } =
         await postsValidation.createPost.input.validateAsync({
           postInput: req.body,
-          userId: res.locals.userId,
         });
+      const imageKey = req.file.key;
+      const { userId } = res.locals;
 
-      await this.postsService.createPost(postInput, userId);
+      await this.postsService.createPost(postInput, imageKey, userId);
 
       res.status(201).json({ message: '작성 완료' });
     } catch (err) {
@@ -24,12 +25,12 @@ class PostsController {
 
   getPosts = async (req, res, next) => {
     try {
-      const { categoryId, page, userId } =
+      const { categoryId, page } =
         await postsValidation.getPosts.input.validateAsync({
           categoryId: req.query.categoryId,
           page: req.query.page,
-          userId: res.locals.userId,
         });
+      const { userId } = res.locals;
 
       const result = await this.postsService.getPosts(categoryId, page, userId);
 
@@ -43,11 +44,10 @@ class PostsController {
 
   getPost = async (req, res, next) => {
     try {
-      const { postId, userId } =
-        await postsValidation.getPost.input.validateAsync({
-          postId: req.params.postId,
-          userId: res.locals.userId,
-        });
+      const { postId } = await postsValidation.getPost.input.validateAsync({
+        postId: req.params.postId,
+      });
+      const { userId } = res.locals;
 
       const post = await this.postsService.getPost(postId, userId);
 
@@ -61,12 +61,12 @@ class PostsController {
 
   updatePost = async (req, res, next) => {
     try {
-      const { postId, postInput, userId } =
+      const { postId, postInput } =
         await postsValidation.updatePost.input.validateAsync({
           postId: req.params.postId,
           postInput: req.body,
-          userId: res.locals.userId,
         });
+      const { userId } = res.locals;
 
       await this.postsService.updatePost(postId, postInput, userId);
 
@@ -78,11 +78,10 @@ class PostsController {
 
   deletePost = async (req, res, next) => {
     try {
-      const { postId, userId } =
-        await postsValidation.deletePost.input.validateAsync({
-          postId: req.params.postId,
-          userId: res.locals.userId,
-        });
+      const { postId } = await postsValidation.deletePost.input.validateAsync({
+        postId: req.params.postId,
+      });
+      const { userId } = res.locals;
 
       await this.postsService.deletePost(postId, userId);
 

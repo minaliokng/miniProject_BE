@@ -4,12 +4,12 @@ const s3 = require('../config/s3');
 const postsValidation = require('../validations/posts.validation');
 
 module.exports = multer({
-  async fileFilter(req, file, callback) {
-    const { title, content, category } = req.body;
+  fileFilter(req, file, callback) {
     try {
       // await postsValidation.createPost.input.validateAsync({
       //   postInput: { title, content, category },
       // });
+      postsValidation.createPost.input.validate(req.body);
       callback(null, true);
     } catch (err) {
       callback(null, false);

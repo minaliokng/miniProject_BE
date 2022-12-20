@@ -1,5 +1,4 @@
-const { json } = require('express');
-const LikeRepository = require('../repositories/Like.repository');
+const LikeRepository = require('../repositories/like.repository');
 
 class LikeService {
   constructor() {
@@ -7,16 +6,15 @@ class LikeService {
   }
 
   changeLike = async (postId, userId) => {
-    try{
-      if (!await this.likeRepository.existPost(postId))
+    try {
+      if (!(await this.likeRepository.existPost(postId)))
         return { errorMessage: '존재하지 않는 게시글', code: 404 };
 
       await this.likeRepository.changeLike(postId, userId);
       return { message: '등록 완료', code: 200 };
-    }
-    catch (e) {
+    } catch (e) {
       if (e === 'already') return { message: '취소 완료', code: 200 };
     }
-  }
+  };
 }
 module.exports = LikeService;

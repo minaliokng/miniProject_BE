@@ -5,9 +5,10 @@ const postsValidation = require('../validations/posts.validation');
 
 module.exports = multer({
   async fileFilter(req, file, callback) {
+    const { title, content, category } = req.body;
     try {
       await postsValidation.createPost.input.validateAsync({
-        postInput: req.body,
+        postInput: { title, content, category },
       });
       callback(null, true);
     } catch (err) {

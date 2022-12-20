@@ -19,6 +19,7 @@ class PostsController {
 
       res.status(201).json({ message: '작성 완료' });
     } catch (err) {
+      await this.postsService.deleteUploadedImage(req.file.key);
       next(err);
     }
   };

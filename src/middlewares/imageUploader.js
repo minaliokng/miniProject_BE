@@ -6,8 +6,9 @@ const logger = require('../config/logger');
 
 module.exports = multer({
   fileFilter(req, file, callback) {
+    const { title, content, categoryId } = req.body;
     const { error } = postsValidation.createPost.input.validate({
-      postInput: req.body,
+      postInput: { title, content, categoryId },
     });
     if (!error) {
       callback(null, true);

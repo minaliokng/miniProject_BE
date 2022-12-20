@@ -11,9 +11,6 @@ const router = Router();
 
 router.use(rateLimiter); // 요청을 제한하는 미들웨어
 
-router.post('/image', imageUploader.single('image'), (req, res) => {
-  res.json({ message: '전송 완료' });
-});
 router.get('/', (req, res) => res.json({ message: 'OK' }));
 router.use('/auth', authRouter);
 router.use('/', commentsRouter); //댓글 관련 모든 uri로

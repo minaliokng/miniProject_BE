@@ -12,7 +12,7 @@ const loggedInYet = async (req, res, next) => {
       res.locals.userId = jwt.verify(tokenValue, JWT_SECRET_KEY).userId;
     next();
   } catch (err) {
-    next(new ApiError('로그인 정보 없음', 400));
+    next(new ApiError('로그인 정보 없음', 403));
   }
 };
 

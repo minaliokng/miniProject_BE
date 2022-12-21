@@ -1,8 +1,6 @@
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const s3 = require('../config/s3');
-const postsValidation = require('../validations/posts.validation');
-const logger = require('../config/logger');
 
 module.exports = multer({
   storage: multerS3({

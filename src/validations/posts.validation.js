@@ -45,6 +45,7 @@ exports.getPost = {
     likesNum: Joi.number().required(),
     userNickname: Joi.string().required(),
     userId: Joi.number().required(),
+    categoryId: Joi.number().required(),
   }),
 };
 

@@ -46,7 +46,8 @@ class PostsMySQLRepository {
         EXISTS(SELECT * WHERE L.userId = ?) AS isLiked,
         COUNT(L.userId) AS likesNum,
         U.nickname AS userNickname,
-        P.userId
+        P.userId,
+        P.categoryId
       FROM Posts P
       INNER JOIN Users U ON P.userId = U.userId
       LEFT JOIN Likes L ON P.postId = L.postId

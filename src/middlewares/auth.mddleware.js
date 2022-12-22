@@ -12,7 +12,7 @@ const loggedInYet = async (req, res, next) => {
       res.locals.userId = jwt.verify(tokenValue, JWT_SECRET_KEY).userId;
     next();
   } catch (err) {
-    next(new ApiError('로그인 정보 없음', 400));
+    next(new ApiError('로그인 정보 없음', 401));
   }
 };
 
@@ -24,7 +24,7 @@ const alreadyLoggedIn = async (req, res, next) => {
     const [tokenType, tokenValue] = authorization.split(' ');
     if (tokenType === 'Bearer' && tokenValue) {
       jwt.verify(tokenValue, JWT_SECRET_KEY);
-      next(new ApiError('로그인 정보가 이미 있음', 400));
+      next(new ApiError('로그인 정보가 이미 있음', 403));
     }
     next();
   } catch (err) {

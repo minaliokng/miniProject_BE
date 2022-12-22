@@ -5,6 +5,7 @@ const postsRouter = require('./posts.route');
 const likeRouter = require('./like.route');
 const commentsRouter = require('./comments.route');
 const rateLimiter = require('../middlewares/rateLimiter');
+const imageUploader = require('../middlewares/imageUploader');
 
 const router = Router();
 

@@ -55,6 +55,10 @@ class PostsService {
 
     await this.postsStorageRepository.deleteImage(post.imageKey);
   };
+
+  deleteUploadedImage = async (imageKey) => {
+    await this.postsStorageRepository.deleteImage(imageKey);
+  };
 }
 
 module.exports = PostsService;

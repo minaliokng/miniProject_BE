@@ -21,6 +21,7 @@ class PostsMySQLRepository {
       `SELECT
         P.postId,
         P.title,
+        P.content,
         CONCAT(?, P.imageKey) AS imageUrl,
         EXISTS(SELECT * WHERE L.userId = ?) AS isLiked,
         U.nickname AS userNickname,

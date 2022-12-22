@@ -48,9 +48,9 @@ class AuthService {
         expiresIn: '1h',
       },
     );
-    await loginResponsePattern.validateAsync(token);
 
-    return token;
+    await loginResponsePattern.validateAsync(token);
+    return { token, nickname: isExistUser.nickname };
   };
 
   //이메일 중복 검사

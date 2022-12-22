@@ -15,8 +15,10 @@ class CommentsService {
 
     if(content === '' || content.trim() === '') throw new ApiError('댓글 내용 없음', 400)
 
-    await this.commentsRepository.postComment(postId, userId, content);
+    const {insertId} = await this.commentsRepository.postComment(postId, userId, content);
+    const [comment] = await this.commentsRepository.getComments(insertId, 1);
 
+    return comment;
   }
 
   getComments = async (postId, page) => {
@@ -25,7 +27,7 @@ class CommentsService {
     const existPost = await this.commentsRepository.existPost(postId);
     if (!existPost) throw new ApiError('존재하지 않는 게시글', 400)
 
-    const comments = await this.commentsRepository.getComments(postId);
+    const comments = await this.commentsRepository.getComments(postId, 0);
     let maxLength = parseInt(comments.length / 5);
     if ((comments.length % 5) != 0) maxLength++;
 

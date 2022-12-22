@@ -1,5 +1,3 @@
 const joi = require('joi');
 
-exports.checkIdPattern = joi
-  .string()
-  .regex(/^[\d]+$/);
+exports.checkIdPattern = joi.number();

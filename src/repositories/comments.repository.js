@@ -47,7 +47,6 @@ class CommentsRepository {
       `UPDATE Comments
       SET
         content = ${content},
-        hasUpdated = 1
       WHERE
         commentId = ${commentId}`,
     );

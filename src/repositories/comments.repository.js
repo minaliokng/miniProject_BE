@@ -31,7 +31,6 @@ class CommentsRepository {
                     C.commentId,
                     C.content,
                     C.createdAt,
-                    C.hasUpdated,
                     U.nickname AS userNickname
                     FROM Comments C
                     INNER JOIN Users U ON C.userId = U.userId `;

@@ -21,6 +21,7 @@ exports.getPosts = {
       Joi.object().keys({
         postId: Joi.number().required(),
         title: Joi.string().required(),
+        content: Joi.string().required(),
         imageUrl: Joi.string().required(),
         isLiked: Joi.number().required(),
         userNickname: Joi.string().required(),
@@ -45,6 +46,7 @@ exports.getPost = {
     likesNum: Joi.number().required(),
     userNickname: Joi.string().required(),
     userId: Joi.number().required(),
+    categoryId: Joi.number().required(),
   }),
 };
 

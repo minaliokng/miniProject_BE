@@ -11,9 +11,9 @@ class CommentsController {
     const {userId} = res.locals;
 
     try{
-      await this.commentsService.postComment(postId, userId, content);
+      const result = await this.commentsService.postComment(postId, userId, content);
       
-      return res.status(201).json({message: "작성 완료"});
+      return res.status(201).json({message: "작성 완료", comment: result});
     }
     catch (err) {
       next(err);

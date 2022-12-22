@@ -46,7 +46,7 @@ class CommentsRepository {
     await database.query(
       `UPDATE Comments
       SET
-        content = ${content},
+        content = ${content}
       WHERE
         commentId = ${commentId}`,
     );

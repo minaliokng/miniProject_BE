@@ -16,12 +16,12 @@ class CommentsService {
     if (content === '' || content.trim() === '')
       throw new ApiError('댓글 내용 없음', 400);
 
-    const { insertId } = await this.commentsRepository.postComment(
+    const { commentId } = await this.commentsRepository.postComment(
       postId,
       userId,
       content,
     );
-    const [comment] = await this.commentsRepository.getComments(insertId, 1);
+    const [comment] = await this.commentsRepository.getComments(commentId, 1);
 
     return comment;
   };
